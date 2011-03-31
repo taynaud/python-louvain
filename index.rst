@@ -31,6 +31,11 @@ The program itself can be found at
 
     <a href="http://perso.crans.org/aynaud/communities/community.py" onClick="javascript: pageTracker._trackPageview('communities/community.py');">http://perso.crans.org/aynaud/communities/community.py</a>
 
+A repository where you can report bugs exist at 
+
+.. raw:: html
+
+    <a href="https://bitbucket.org/taynaud/python-louvain">https://bitbucket.org/taynaud/python-louvain</a>
 
 Example :
 =========
