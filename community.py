@@ -44,47 +44,6 @@ def partition_at_level(dendogram, level) :
         for node, community in partition.iteritems() :
             partition[node] = dendogram[index][community]
     return partition
-
-def modularity_undefgrouped(partition, graph) :
-    """Compute the modularity of a partition of a graph. If node are not 
-    assigned to a community, it is in the community -1.
-
-    :param partition: the partition of the nodes, i.e a dictionary where keys 
-                                are their nodes and values the communities
-    :type partition: dictionary
-    :param graph: the networkx graph which is decomposed
-    :type graph: networkx graph
-    :rtype: float
-    :return: The modularity
-
-    """
-
-
-    inc = dict([])
-    deg = dict([])
-    links = graph.size(weighted = True)
-    if links < 1 :
-        return -2
-    for node in graph :
-        com = partition.get(node, -1)
-        deg[com] = deg.get(com, 0.) + graph.degree(node, weighted = True)
-        for neighbor, datas in graph[node].iteritems() :
-            weight = datas.get("weight", 1)
-            if partition.get(neighbor, -1) == com :
-                if neighbor == node :
-                    inc[com] = inc.get(com, 0.) + float(weight)
-                else :
-                    inc[com] = inc.get(com, 0.) + float(weight) / 2.
-
-    res = 0.
-    for com in set(partition.values()) :
-        res += (inc.get(com, 0.) / links) - (deg.get(com, 0.) / (2.*links))**2
-        
-    #finally, com -1 :
-    res += (inc.get(-1, 0.) / links) - (deg.get(-1, 0.) / (2.*links))**2
-    
-    return res
-    
     
 
 def modularity(partition, graph) :
@@ -98,13 +57,14 @@ def modularity(partition, graph) :
     :return: The modularity
 
     """
-
+    if type(graph) != nx.Graph :
+        raise TypeError("Bad graph type, use only non directed graph")
 
     inc = dict([])
     deg = dict([])
     links = graph.size(weighted = True)
-    if links < 1 :
-        return -2
+    if links == 0 :
+        raise ValueError("A graph without link has an undefined modularity")
     for node in graph :
         com = partition[node]
         deg[com] = deg.get(com, 0.) + graph.degree(node, weighted = True)
@@ -142,67 +102,6 @@ def best_partition(graph, partition = None) :
 
 
 
-def load_binary(data) :
-    """Load binary graph as used by the cpp implementation of this algorithm
-
-    :param data: the file containing the data
-    :type data: string or file
-    :rtype: networkx.Graph
-    :return: The graph
-
-    """
-    if type(data) == types.StringType :
-        data = open(data, "rb")
-    reader = array.array("I")
-    reader.fromfile(data, 1)
-    num_nodes = reader.pop()
-    reader = array.array("I")
-    reader.fromfile(data, num_nodes)
-    cum_deg = reader.tolist()
-    num_links = reader.pop()
-    reader = array.array("I")
-    reader.fromfile(data, num_links)
-    links = reader.tolist()
-    graph = nx.Graph()
-    graph.add_nodes_from(range(num_nodes))
-    prec_deg = 0
-    for index in range(num_nodes) :
-        last_deg = cum_deg[index]
-        neighbors = links[prec_deg:last_deg]
-        graph.add_edges_from([(index, int(neigh)) for neigh in neighbors])
-        prec_deg = last_deg
-    return graph
-
-
-
-def renumber(dictionary) :
-    """Renumber the values of the dictionary from 0 to n
-
-    :param dictionary: the partition
-    :type dictionary: dictionary
-    :rtype: dictionary
-    :return: The modified partition
-
-    """
-
-    count = 0
-    ret = dictionary.copy()
-    new_values = dict([])
-    for key in dictionary.keys() :
-        value = dictionary[key]
-        new_value = new_values.get(value, -1)
-        if new_value == -1 :
-            new_values[value] = count
-            new_value = count
-            count = count + 1
-        ret[key] = new_value
-    return ret
-
-
-
-
-
-
 def generate_dendogram(graph, part_init = None) :
     """Find communities in the graph and return the associated dendogram
 
@@ -214,15 +113,16 @@ def generate_dendogram(graph, part_init = None) :
     :return: a list of partitions, ie dictionnaries where keys of the i+1 are the values of the i. and where keys of the first are the nodes of graph
 
     """
-
+    if type(graph) != nx.Graph :
+        raise TypeError("Bad graph type, use only non directed graph")
     current_graph = graph.copy()
     status = Status()
     status.init(current_graph, part_init)
     mod = __modularity(status)
     status_list = list()
-    one_level(current_graph, status)
+    __one_level(current_graph, status)
     new_mod = __modularity(status)
-    partition = renumber(status.node2com)
+    partition = __renumber(status.node2com)
     status_list.append(partition)
     mod = new_mod
     current_graph = induced_graph(partition, current_graph)
@@ -230,11 +130,11 @@ def generate_dendogram(graph, part_init = None) :
 
 
     while True :
-        one_level(current_graph, status)
+        __one_level(current_graph, status)
         new_mod = __modularity(status)
         if new_mod - mod < MIN :
             break
-        partition = renumber(status.node2com)
+        partition = __renumber(status.node2com)
         status_list.append(partition)
         mod = new_mod
         current_graph = induced_graph(partition, current_graph)
@@ -267,9 +167,62 @@ def induced_graph(partition, graph) :
         ret.add_edge(com1, com2, weight = w_prec + weight)
     return ret
 
+def __renumber(dictionary) :
+    """Renumber the values of the dictionary from 0 to n
+
+    :param dictionary: the partition
+    :type dictionary: dictionary
+    :rtype: dictionary
+    :return: The modified partition
+
+    """
+
+    count = 0
+    ret = dictionary.copy()
+    new_values = dict([])
+    for key in dictionary.keys() :
+        value = dictionary[key]
+        new_value = new_values.get(value, -1)
+        if new_value == -1 :
+            new_values[value] = count
+            new_value = count
+            count = count + 1
+        ret[key] = new_value
+    return ret
 
 
-def one_level(graph, status) :
+def __load_binary(data) :
+    """Load binary graph as used by the cpp implementation of this algorithm
+
+    :param data: the file containing the data
+    :type data: string or file
+    :rtype: networkx.Graph
+    :return: The graph
+
+    """
+    if type(data) == types.StringType :
+        data = open(data, "rb")
+    reader = array.array("I")
+    reader.fromfile(data, 1)
+    num_nodes = reader.pop()
+    reader = array.array("I")
+    reader.fromfile(data, num_nodes)
+    cum_deg = reader.tolist()
+    num_links = reader.pop()
+    reader = array.array("I")
+    reader.fromfile(data, num_links)
+    links = reader.tolist()
+    graph = nx.Graph()
+    graph.add_nodes_from(range(num_nodes))
+    prec_deg = 0
+    for index in range(num_nodes) :
+        last_deg = cum_deg[index]
+        neighbors = links[prec_deg:last_deg]
+        graph.add_edges_from([(index, int(neigh)) for neigh in neighbors])
+        prec_deg = last_deg
+    return graph
+
+def __one_level(graph, status) :
     """Compute one level of communities
 
     :param graph: the graph we are working on
@@ -429,7 +382,7 @@ def __main() :
     """Main function"""
     try :
         filename = sys.argv[1]
-        graphfile = load_binary(filename)
+        graphfile = __load_binary(filename)
         partition = best_partition(graphfile)
         print >> sys.stderr, str(modularity(partition, graphfile))
         for elem, part in partition.iteritems() :
