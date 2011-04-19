@@ -60,7 +60,6 @@ class ModularityTest(unittest.TestCase):
                 break    
         self.assertRaises(KeyError, co.modularity, part, g)
 
-
     #These are known values taken from the paper
     #1. Bartheemy, M. & Fortunato, S. Resolution limit in community detection. Proceedings of the National Academy of Sciences of the United States of America 104, 36-41(2007).
     def test_disjoint_clique(self) :
@@ -81,7 +80,6 @@ class ModularityTest(unittest.TestCase):
             mod = co.modularity(part, g)
             self.assertAlmostEqual(mod, 1. - 1./float(num_clique),  msg = "Num clique: " + str(num_clique) + " size_clique: " + str(size_clique))
 
-            
     def test_ring_clique(self) :
         """"
         then, a group of num_clique of size size_clique connected with only two links to other in a ring
@@ -103,10 +101,31 @@ class ModularityTest(unittest.TestCase):
             mod = co.modularity(part, g)
             self.assertAlmostEqual(mod, 1. - 1./float(num_clique) - float(num_clique) / float(g.number_of_edges()), msg = "Num clique: " + str(num_clique) + " size_clique: " + str(size_clique) )
 
-        
 
 
 class BestPartitionTest(unittest.TestCase):
+    numtest = 100
+
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+
+
+class InducedGraphTest(unittest.TestCase):
+    numtest = 100
+
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        pass
+
+
+
+class GenerateDendogramTest(unittest.TestCase):
     numtest = 100
 
     def setUp(self):
@@ -126,8 +145,7 @@ class BestPartitionTest(unittest.TestCase):
         g.add_nodes_from(range(10))
         self.assertRaises(ValueError, co.best_partition,  g)
 
-            
-    
+
 
 if __name__ == '__main__':
     unittest.main()
