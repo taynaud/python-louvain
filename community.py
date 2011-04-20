@@ -10,8 +10,8 @@ __author__ = """Thomas Aynaud (thomas.aynaud@lip6.fr)"""
 #    All rights reserved.
 #    BSD license.
 
-PASS_MAX = -1
-MIN = 0.0000001
+__PASS_MAX = -1
+__MIN = 0.0000001
 
 import networkx as nx
 import sys
@@ -123,7 +123,7 @@ def generate_dendogram(graph, part_init = None) :
     while True :
         __one_level(current_graph, status)
         new_mod = __modularity(status)
-        if new_mod - mod < MIN :
+        if new_mod - mod < __MIN :
             break
         partition = __renumber(status.node2com)
         status_list.append(partition)
@@ -235,14 +235,14 @@ def __one_level(graph, status) :
     cur_mod = __modularity(status)
     new_mod = cur_mod
     
-    while modif  and nb_pass_done != PASS_MAX :
+    while modif  and nb_pass_done != __PASS_MAX :
         cur_mod = new_mod
         modif = False
         nb_pass_done += 1
         
         for node in graph.nodes() :
             com_node = status.node2com[node]
-            degc_totw = status.gdegrees.get(node, 0.) / status.total_weight*2.
+            degc_totw = status.gdegrees.get(node, 0.) / (status.total_weight*2.)
             neigh_communities = __neighcom(node, graph, status)
             __remove(node, com_node,
                     neigh_communities.get(com_node, 0.), status)
@@ -258,7 +258,7 @@ def __one_level(graph, status) :
             if best_com != com_node :
                 modif = True                
         new_mod = __modularity(status)
-        if new_mod - cur_mod < MIN :
+        if new_mod - cur_mod < __MIN :
             break
 
 
