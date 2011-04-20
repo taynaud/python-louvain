@@ -3,6 +3,32 @@ import networkx as nx
 import community as co
 import random
 
+def girvan_graphs(zout) :
+    """
+    Create a graph of 128 vertices, 4 communities, like in
+    Community Structure in  social and biological networks.
+    Girvan newman, 2002. PNAS June, vol 99 n 12
+
+    community is node modulo 4
+    """
+
+    pout = float(zout)/96.
+    pin = (16.-pout*96.)/31.
+    graph = nx.Graph()
+    graph.add_nodes_from(range(128))
+    for x in graph.nodes() :
+        for y in graph.nodes() :
+            if x < y :
+                val = random.random()
+                if x % 4 == y % 4 :
+                    #nodes belong to the same community
+                    if val < pin :
+                        graph.add_edge(x, y)
+
+                else :
+                    if val < pout :
+                        graph.add_edge(x, y)
+    return graph
     
 class ModularityTest(unittest.TestCase):
     numtest = 10
@@ -112,10 +138,24 @@ class BestPartitionTest(unittest.TestCase):
     def tearDown(self):
         pass
 
+    def test_bad_graph_input(self) :
+        """best_partition is only defined with undirected graph"""
+        g = nx.erdos_renyi_graph(50, 0.1, directed=True)
+        self.assertRaises(TypeError, co.best_partition,  g)
+
+    def test_girvan(self) :
+        """
+        Test that community found are good using Girvan & Newman benchmark
+        """
+        g = girvan_graphs(5)#use small zout, with high zout result may change
+        part = co.best_partition(g)
+        print part
+        for node, com in part.iteritems() :
+            self.assertEqual(com, part[node%4])
+            
 
 
 class InducedGraphTest(unittest.TestCase):
-    numtest = 100
 
     def setUp(self):
         pass
@@ -123,8 +163,52 @@ class InducedGraphTest(unittest.TestCase):
     def tearDown(self):
         pass
 
+    def test_nodes(self) :
+        """
+        Test that result nodes are the communities
+        """
+        g = nx.erdos_renyi_graph(50, 0.1)
+        part = dict([])
+        for node in g.nodes() :
+            part[node] = node % 5
+        self.assertSetEqual(set(part.values()), set(co.induced_graph(part, g).nodes()))
+        
+    def test_weight(self) :
+        """
+        Test that total edge weight does not change
+        """
+        g = nx.erdos_renyi_graph(50, 0.1)
+        part = dict([])
+        for node in g.nodes() :
+            part[node] = node % 5
+        self.assertEqual(g.size(weighted=True), co.induced_graph(part, g).size(weighted=True))
 
+    def test_uniq(self) :
+        """
+        Test that the induced graph is the same when all nodes are alone
+        """
+        g = nx.erdos_renyi_graph(50, 0.1)
+        part = dict([])
+        for node in g.nodes() :
+            part[node] = node
+        ind = co.induced_graph(part, g)
+        self.assert_(nx.is_isomorphic(g, ind))
 
+    def test_clique(self):
+        """
+        Test that a complet graph of size 2*n has the right behavior when split in two
+        """
+        n = 5
+        g = nx.complete_graph(2*n)
+        part = dict([])
+        for node in g.nodes() :
+            part[node] = node % 2
+        ind = co.induced_graph(part, g)
+        goal = nx.Graph()
+        goal.add_weighted_edges_from([(0,1,n*n),(0,0,n*(n-1)/2), (1, 1, n*(n-1)/2)])
+        self.assert_(nx.is_isomorphic(ind, goal))
+
+    
 class GenerateDendogramTest(unittest.TestCase):
     numtest = 100
 
@@ -135,7 +219,7 @@ class GenerateDendogramTest(unittest.TestCase):
         pass
 
     def test_bad_graph_input(self) :
-        """best_partition is only defined with undirected graph"""
+        """generate_dendogram is only defined with undirected graph"""
         g = nx.erdos_renyi_graph(50, 0.1, directed=True)
         self.assertRaises(TypeError, co.best_partition,  g)
 
