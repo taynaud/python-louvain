@@ -5,7 +5,7 @@ import random
 
     
 class ModularityTest(unittest.TestCase):
-    numtest = 100
+    numtest = 10
     
     def setUp(self):
         pass
@@ -138,12 +138,6 @@ class GenerateDendogramTest(unittest.TestCase):
         """best_partition is only defined with undirected graph"""
         g = nx.erdos_renyi_graph(50, 0.1, directed=True)
         self.assertRaises(TypeError, co.best_partition,  g)
-
-    def test_empty_graph_input(self) :
-        """best_partition of a graph without links is undefined"""
-        g = nx.Graph()
-        g.add_nodes_from(range(10))
-        self.assertRaises(ValueError, co.best_partition,  g)
 
 
 
