@@ -80,6 +80,8 @@ def best_partition(graph, partition = None) :
     """Compute the partition of the graph nodes which maximises the modularity
     (or try..) using the Louvain heuristices
 
+
+    
     :param graph: the networkx graph which is decomposed
     :type graph: networkx graph
     :param partition: the algorithm will start using this partition of the nodes. It's a dictionary where keys are their nodes and values the communities
