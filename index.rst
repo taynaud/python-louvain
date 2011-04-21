@@ -94,6 +94,7 @@ As python module :
 Changelog :
 ===========
 
+* 04/21/2011 : modificatios to use networkx like documentation and use of test.
 * 02/22/2011 : correction of a bug regarding edge weights
 * 01/14/2010 : modification to use networkx 1.01 graph api and adding the possibility to start the algorithm with a given partition
 * 04/10/2009 : increase of the speed of the detection by caching node degrees
