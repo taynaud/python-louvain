@@ -372,11 +372,11 @@ def __one_level(graph, status) :
                 incr =  dnc  - status.degrees.get(com, 0.) * degc_totw
                 if incr > best_increase :
                     best_increase = incr
-                    best_com = com                    
+                    best_com = com
             __insert(node, best_com,
                     neigh_communities.get(best_com, 0.), status)
             if best_com != com_node :
-                modif = True                
+                modif = True
         new_mod = __modularity(status)
         if new_mod - cur_mod < __MIN :
             break
