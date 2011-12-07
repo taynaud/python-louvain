@@ -100,13 +100,13 @@ def modularity(partition, graph) :
 
     inc = dict([])
     deg = dict([])
-    links = graph.size(weighted = True)
+    links = graph.size(weight='weight')
     if links == 0 :
         raise ValueError("A graph without link has an undefined modularity")
     
     for node in graph :
         com = partition[node]
-        deg[com] = deg.get(com, 0.) + graph.degree(node, weighted = True)
+        deg[com] = deg.get(com, 0.) + graph.degree(node, weight = 'weight')
         for neighbor, datas in graph[node].iteritems() :
             weight = datas.get("weight", 1)
             if partition[neighbor] == com :
@@ -283,7 +283,7 @@ def induced_graph(partition, graph) :
     >>> ind = induced_graph(part, g)
     >>> goal = nx.Graph()
     >>> goal.add_weighted_edges_from([(0,1,n*n),(0,0,n*(n-1)/2), (1, 1, n*(n-1)/2)])
-    >>> nx.is_isomorphic(ind, goal)
+    >>> nx.is_isomorphic(int, goal)
     True
     """
     ret = nx.Graph()
@@ -372,11 +372,11 @@ def __one_level(graph, status) :
                 incr =  dnc  - status.degrees.get(com, 0.) * degc_totw
                 if incr > best_increase :
                     best_increase = incr
-                    best_com = com
+                    best_com = com                    
             __insert(node, best_com,
                     neigh_communities.get(best_com, 0.), status)
             if best_com != com_node :
-                modif = True
+                modif = True                
         new_mod = __modularity(status)
         if new_mod - cur_mod < __MIN :
             break
@@ -424,11 +424,11 @@ class Status :
         self.degrees = dict([])
         self.gdegrees = dict([])
         self.internals = dict([])
-        self.total_weight = graph.size(weighted = True)
+        self.total_weight = graph.size(weight = 'weight')
         if part == None :
             for node in graph.nodes() :
                 self.node2com[node] = count
-                deg = float(graph.degree(node, weighted = True))
+                deg = float(graph.degree(node, weight = 'weight'))
                 self.degrees[count] = deg
                 self.gdegrees[node] = deg
                 self.loops[node] = float(graph.get_edge_data(node, node,
@@ -439,7 +439,7 @@ class Status :
             for node in graph.nodes() :
                 com = part[node]
                 self.node2com[node] = com
-                deg = float(graph.degree(node, weighted = True))
+                deg = float(graph.degree(node, weigh = 'weight'))
                 self.degrees[com] = self.degrees.get(com, 0) + deg
                 self.gdegrees[node] = deg
                 inc = 0.

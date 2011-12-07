@@ -194,7 +194,7 @@ class InducedGraphTest(unittest.TestCase):
         part = dict([])
         for node in g.nodes() :
             part[node] = node % 5
-        self.assertEqual(g.size(weighted=True), co.induced_graph(part, g).size(weighted=True))
+        self.assertEqual(g.size(weight = 'weight'), co.induced_graph(part, g).size(weight = 'weight'))
 
     def test_uniq(self) :
         """
