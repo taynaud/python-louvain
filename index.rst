@@ -25,17 +25,14 @@ Journal of Statistical Mechanics: Theory and Experiment 2008(10), P10008 (12pp)
 It depends on Networkx to handle graph operations :
 http://networkx.lanl.gov/
 
-The program itself can be found at
-
-.. raw:: html
-
-    <a href="http://perso.crans.org/aynaud/communities/community.py" onClick="javascript: pageTracker._trackPageview('communities/community.py');">http://perso.crans.org/aynaud/communities/community.py</a>
-
-A repository where you can report bugs exist at 
+The program can be found in a repository where you can also report bugs : 
 
 .. raw:: html
 
     <a href="https://bitbucket.org/taynaud/python-louvain">https://bitbucket.org/taynaud/python-louvain</a>
+
+
+
 
 Example :
 =========
