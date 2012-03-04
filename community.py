@@ -230,6 +230,15 @@ def generate_dendogram(graph, part_init = None) :
     """
     if type(graph) != nx.Graph :
         raise TypeError("Bad graph type, use only non directed graph")
+
+    #special case, when there is no link 
+    #the best partition is everyone in its community
+    if graph.number_of_edges() == 0 :
+        part = dict([])
+        for node in graph.nodes() :
+            part[node] = node
+        return part
+        
     current_graph = graph.copy()
     status = Status()
     status.init(current_graph, part_init)
@@ -429,6 +438,8 @@ class Status :
             for node in graph.nodes() :
                 self.node2com[node] = count
                 deg = float(graph.degree(node, weight = 'weight'))
+                if deg < 0 :
+                    raise ValueError("Bad graph type, use positive weights")
                 self.degrees[count] = deg
                 self.gdegrees[node] = deg
                 self.loops[node] = float(graph.get_edge_data(node, node,
@@ -445,6 +456,8 @@ class Status :
                 inc = 0.
                 for neighbor, datas in graph[node].iteritems() :
                     weight = datas.get("weight", 1)
+                    if weight <= 0 :
+                        raise ValueError("Bad graph type, use positive weights")
                     if part[neighbor] == com :
                         if neighbor == node :
                             inc += float(weight)
