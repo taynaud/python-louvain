@@ -29,11 +29,11 @@ def girvan_graphs(zout) :
                     if val < pout :
                         graph.add_edge(x, y)
     return graph
-    
+
 class ModularityTest(unittest.TestCase):
-    
+
     numtest = 10
-    
+
     def test_allin_is_zero(self):
         """it test that everyone in one community has a modularity of 0"""
         for i in range(self.numtest) :
@@ -42,7 +42,7 @@ class ModularityTest(unittest.TestCase):
             for node in g :
                 part[node] = 0
             self.assertEqual(co.modularity(part, g), 0)
-            
+
     def test_range(self) :
         """test that modularity is always between -1 and 1"""
         for i in range(self.numtest) :
@@ -53,7 +53,7 @@ class ModularityTest(unittest.TestCase):
             mod = co.modularity(part, g)
             self.assertGreaterEqual(mod, -1)
             self.assertLessEqual(mod, 1)
-            
+
     def test_bad_graph_input(self) :
         """modularity is only defined with undirected graph"""
         g = nx.erdos_renyi_graph(50, 0.1, directed=True)
@@ -70,7 +70,7 @@ class ModularityTest(unittest.TestCase):
         for node in g :
             part[node] = 0
         self.assertRaises(ValueError, co.modularity, part, g)
-        
+
     def test_bad_partition_input(self) :
         """modularity is undefined when some nodes are not in a community"""
         g = nx.erdos_renyi_graph(50, 0.1)
@@ -78,7 +78,7 @@ class ModularityTest(unittest.TestCase):
         for count, node in enumerate(g) :
             part[node] = 0
             if count == 40 :
-                break    
+                break
         self.assertRaises(KeyError, co.modularity, part, g)
 
     #These are known values taken from the paper
@@ -161,7 +161,7 @@ class BestPartitionTest(unittest.TestCase):
                 p = part[str(clique) + "_0"]
                 for node in range(size_clique) :
                     self.assertEqual(p, part[str(clique) + "_" + str(node)])
-                    
+
     def test_allnodes(self) :
         """
         Test that all nodes are in a community
@@ -170,8 +170,8 @@ class BestPartitionTest(unittest.TestCase):
         part = co.best_partition(g)
         for node in g.nodes() :
             self.assert_(part.has_key(node))
-        
-            
+
+
 
 
 class InducedGraphTest(unittest.TestCase):
@@ -185,7 +185,7 @@ class InducedGraphTest(unittest.TestCase):
         for node in g.nodes() :
             part[node] = node % 5
         self.assertSetEqual(set(part.values()), set(co.induced_graph(part, g).nodes()))
-        
+
     def test_weight(self) :
         """
         Test that total edge weight does not change
@@ -224,7 +224,7 @@ class InducedGraphTest(unittest.TestCase):
 
 class PartitionAtLevelTest(unittest.TestCase):
     pass
-        
+
 class GenerateDendogramTest(unittest.TestCase):
     def test_bad_graph_input(self) :
         """generate_dendogram is only defined with undirected graph"""
@@ -258,6 +258,6 @@ class GenerateDendogramTest(unittest.TestCase):
                 comhigher = [ p2[node] for node, comnode in p1.iteritems() if comnode == com]
                 self.assertEqual(len(set(comhigher)), 1)
 
-        
+
 if __name__ == '__main__':
     unittest.main()
