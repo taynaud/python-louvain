@@ -450,7 +450,7 @@ class Status :
             for node in graph.nodes() :
                 com = part[node]
                 self.node2com[node] = com
-                deg = float(graph.degree(node, weigh = 'weight'))
+                deg = float(graph.degree(node, weight = 'weight'))
                 self.degrees[com] = self.degrees.get(com, 0) + deg
                 self.gdegrees[node] = deg
                 inc = 0.
