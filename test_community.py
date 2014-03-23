@@ -138,7 +138,7 @@ class BestPartitionTest(unittest.TestCase):
         """
         g = girvan_graphs(4)#use small zout, with high zout results may change
         part = co.best_partition(g)
-        for node, com in part.iteritems() :
+        for node, com in part.items() :
             self.assertEqual(com, part[node%4])
 
     def test_ring(self) :
@@ -169,7 +169,7 @@ class BestPartitionTest(unittest.TestCase):
         g = nx.erdos_renyi_graph(50, 0.1)
         part = co.best_partition(g)
         for node in g.nodes() :
-            self.assert_(part.has_key(node))
+            self.assert_(node in part)
 
 
 
@@ -255,7 +255,7 @@ class GenerateDendogramTest(unittest.TestCase):
             p2 = parts[l+1]
             coms = set(p1.values())
             for com in coms :
-                comhigher = [ p2[node] for node, comnode in p1.iteritems() if comnode == com]
+                comhigher = [ p2[node] for node, comnode in p1.items() if comnode == com]
                 self.assertEqual(len(set(comhigher)), 1)
 
 
