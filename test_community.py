@@ -225,18 +225,18 @@ class InducedGraphTest(unittest.TestCase):
 class PartitionAtLevelTest(unittest.TestCase):
     pass
 
-class GenerateDendogramTest(unittest.TestCase):
+class GenerateDendrogramTest(unittest.TestCase):
     def test_bad_graph_input(self) :
-        """generate_dendogram is only defined with undirected graph"""
+        """generate_dendrogram is only defined with undirected graph"""
         g = nx.erdos_renyi_graph(50, 0.1, directed=True)
         self.assertRaises(TypeError, co.best_partition,  g)
 
     def test_modularity_increase(self):
         """
-        Generate a dendogram and test that modularity is always increasing
+        Generate a dendrogram and test that modularity is always increasing
         """
         g = nx.erdos_renyi_graph(1000, 0.01)
-        dendo = co.generate_dendogram(g)
+        dendo = co.generate_dendrogram(g)
         mod_prec = -1.
         mods = [co.modularity(co.partition_at_level(dendo, level), g) for level in range(len(dendo)) ]
         self.assertListEqual(mods, sorted(mods))
@@ -246,7 +246,7 @@ class GenerateDendogramTest(unittest.TestCase):
         Test that two nodes in the same community at one level stay in the same at higher level
         """
         g = nx.erdos_renyi_graph(500, 0.01)
-        dendo = co.generate_dendogram(g)
+        dendo = co.generate_dendrogram(g)
         parts = dict([])
         for l in range(len(dendo)) :
             parts[l] = co.partition_at_level(dendo, l)
