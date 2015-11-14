@@ -461,7 +461,8 @@ class Status(object):
                 self.node2com[node] = count
                 deg = float(graph.degree(node, weight='weight'))
                 if deg < 0:
-                    raise ValueError("Bad graph type, use positive weights")
+                    error = "Bad graph type ({})".format(type(graph))
+                    raise ValueError(error)
                 self.degrees[count] = deg
                 self.gdegrees[node] = deg
                 edge_data = graph.get_edge_data(node, node, {"weight": 0})
