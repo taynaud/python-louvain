@@ -21,9 +21,5 @@ setup(
         "networkx",
     ],
 
-    entry_points={
-        'console_scripts': [
-            'community = community:main',
-        ]
-    }
+    scripts=['bin/community']
 )
