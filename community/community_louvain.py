@@ -130,7 +130,7 @@ def modularity(partition, graph, weight='weight'):
     return res
 
 
-def best_partition(graph, partition=None, weight='weight'):
+def best_partition(graph, partition=None, weight='weight', resolution=1.):
     """Compute the partition of the graph nodes which maximises the modularity
     (or try..) using the Louvain heuristices
 
@@ -146,6 +146,11 @@ def best_partition(graph, partition=None, weight='weight'):
        It's a dictionary where keys are their nodes and values the communities
     weight : str, optional
         the key in graph to use as weight. Default to 'weight'
+    resolution :  double, optional
+        Will change the size of the communities, default to 1.
+        represents the time described in
+        "Laplacian Dynamics and Multiscale Modular Structure in Networks",
+        R. Lambiotte, J.-C. Delvenne, M. Barahona
 
     Returns
     -------
@@ -195,11 +200,11 @@ def best_partition(graph, partition=None, weight='weight'):
     >>> nx.draw_networkx_edges(G,pos, alpha=0.5)
     >>> plt.show()
     """
-    dendo = generate_dendrogram(graph, partition, weight)
+    dendo = generate_dendrogram(graph, partition, weight, resolution)
     return partition_at_level(dendo, len(dendo) - 1)
 
 
-def generate_dendrogram(graph, part_init=None, weight='weight'):
+def generate_dendrogram(graph, part_init=None, weight='weight', resolution=1.):
     """Find communities in the graph and return the associated dendrogram
 
     A dendrogram is a tree and each level is a partition of the graph nodes.
@@ -212,12 +217,16 @@ def generate_dendrogram(graph, part_init=None, weight='weight'):
     ----------
     graph : networkx.Graph
         the networkx graph which will be decomposed
-    part_init : dict, optionnal
+    part_init : dict, optional
         the algorithm will start using this partition of the nodes. It's a
         dictionary where keys are their nodes and values the communities
     weight : str, optional
         the key in graph to use as weight. Default to 'weight'
-
+    resolution :  double, optional
+        Will change the size of the communities, default to 1.
+        represents the time described in
+        "Laplacian Dynamics and Multiscale Modular Structure in Networks",
+        R. Lambiotte, J.-C. Delvenne, M. Barahona
 
     Returns
     -------
@@ -268,7 +277,7 @@ def generate_dendrogram(graph, part_init=None, weight='weight'):
     status = Status()
     status.init(current_graph, weight, part_init)
     status_list = list()
-    __one_level(current_graph, status, weight)
+    __one_level(current_graph, status, weight, resolution)
     new_mod = __modularity(status)
     partition = __renumber(status.node2com)
     status_list.append(partition)
@@ -277,7 +286,7 @@ def generate_dendrogram(graph, part_init=None, weight='weight'):
     status.init(current_graph, weight)
 
     while True:
-        __one_level(current_graph, status, weight)
+        __one_level(current_graph, status, weight, resolution)
         new_mod = __modularity(status)
         if new_mod - mod < __MIN:
             break
@@ -384,7 +393,7 @@ def __load_binary(data):
     return graph
 
 
-def __one_level(graph, status, weight_key):
+def __one_level(graph, status, weight_key, resolution):
     """Compute one level of communities
     """
     modified = True
@@ -406,7 +415,8 @@ def __one_level(graph, status, weight_key):
             best_com = com_node
             best_increase = 0
             for com, dnc in neigh_communities.items():
-                incr = dnc - status.degrees.get(com, 0.) * degc_totw
+                incr = resolution * dnc - \
+                       status.degrees.get(com, 0.) * degc_totw
                 if incr > best_increase:
                     best_increase = incr
                     best_com = com

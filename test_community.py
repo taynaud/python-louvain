@@ -199,6 +199,10 @@ class BestPartitionTest(unittest.TestCase):
         self.assertAlmostEqual(co.modularity(part, graph),
                                co.modularity(part_weight, graph, "test_weight"))
 
+        part_res_low = co.best_partition(graph, resolution=0.1)
+        self.assertTrue(
+            len(set(part.values())) < len(set(part_res_low.values())))
+
 
 class InducedGraphTest(unittest.TestCase):
     """
