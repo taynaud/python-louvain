@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """This package implements community detection."""
 
-from community_louvain import *
+from .community_louvain import *
 
 __all__ = ["partition_at_level", "modularity", "best_partition",
            "generate_dendrogram", "generate_dendogram", "induced_graph",
