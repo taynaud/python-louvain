@@ -186,6 +186,19 @@ class BestPartitionTest(unittest.TestCase):
         for node in graph.nodes():
             self.assertTrue(node in part)
 
+    def test_karate(self):
+        """"test modularity on Zachary's karate club"""
+        graph = nx.karate_club_graph()
+        part = co.best_partition(graph)
+        self.assertTrue(co.modularity(part, graph) > 0.41)
+
+        for e1, e2 in graph.edges_iter():
+            graph[e1][e2]["test_weight"] = 1.
+
+        part_weight = co.best_partition(graph, weight="test_weight")
+        self.assertAlmostEqual(co.modularity(part, graph),
+                               co.modularity(part_weight, graph, "test_weight"))
+
 
 class InducedGraphTest(unittest.TestCase):
     """
@@ -212,6 +225,12 @@ class InducedGraphTest(unittest.TestCase):
             part[node] = node % 5
         self.assertEqual(graph.size(weight='weight'),
                          co.induced_graph(part, graph).size(weight='weight'))
+
+        for e1, e2 in graph.edges_iter():
+            graph[e1][e2]["test_weight"] = 2.
+
+        self.assertEqual(graph.size(weight='test_weight'),
+                         co.induced_graph(part, graph, "test_weight").size(weight='test_weight'))
 
     def test_unique(self):
         """
