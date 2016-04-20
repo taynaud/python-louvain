@@ -271,7 +271,7 @@ def generate_dendrogram(graph, part_init=None, weight='weight', resolution=1.):
         part = dict([])
         for node in graph.nodes():
             part[node] = node
-        return part
+        return [part]
 
     current_graph = graph.copy()
     status = Status()
