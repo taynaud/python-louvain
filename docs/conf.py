@@ -13,6 +13,10 @@
 
 import sys, os
 
+realpath = os.path.realpath(__file__)
+dir_realpath = os.path.dirname(os.path.dirname(realpath))
+sys.path.append(dir_realpath)
+
 import community
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
