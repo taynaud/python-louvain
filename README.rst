@@ -38,3 +38,7 @@ To run tests::
 
      pip install nose
      python setup.py test
+
+
+.. image:: https://travis-ci.org/taynaud/python-louvain.svg?branch=master
+    :target: https://travis-ci.org/taynaud/python-louvain
