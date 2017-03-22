@@ -365,7 +365,7 @@ def __renumber(dictionary):
     return ret
 
 
-def __load_binary(data):
+def load_binary(data):
     """Load binary graph as used by the cpp implementation of this algorithm
     """
     data = open(data, "rb")
