@@ -1,8 +1,9 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 from __future__ import print_function
 import sys
-from community import *
+from community import best_partition, load_binary, modularity
+
 
 def main():
     """Main function to mimic C++ version behavior"""
