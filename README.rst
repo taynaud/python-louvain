@@ -25,6 +25,8 @@ To use as a python library::
 Documentation
 -------------
 
+You can find documentation at https://python-louvain.readthedocs.io/
+
 To generate documentation run::
 
      pip install numpydoc sphinx
