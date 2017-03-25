@@ -7,7 +7,7 @@ setup(
     author_email="taynaud@gmail.com",
     description="Louvain algorithm for community detection",
     license="BSD",
-    url="http://perso.crans.org/aynaud/communities/",
+    url="https://github.com/taynaud/python-louvain",
     classifiers=[
         "Programming Language :: Python",
         "Programming Language :: Python :: 2.7",
