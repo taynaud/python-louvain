@@ -44,3 +44,7 @@ To run tests::
 
 .. image:: https://travis-ci.org/taynaud/python-louvain.svg?branch=master
     :target: https://travis-ci.org/taynaud/python-louvain
+
+.. image:: https://readthedocs.org/projects/python-louvain/badge/?version=latest
+:target: http://python-louvain.readthedocs.io/en/latest/?badge=latest
+:alt: Documentation Status
