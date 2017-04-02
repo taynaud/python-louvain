@@ -4,9 +4,19 @@ Louvain Community Detection
 Installing
 ----------
 
-To build and install run::
+To build and install run from source::
 
      python setup.py install
+
+You can also install from pip with::
+
+    pip install python-louvain
+
+
+The package name on pip is `python-louvain` but it is imported as `community`
+in python. You will find documentation about this module at
+http://python-louvain.readthedocs.io/
+
 
 Usage
 -----
