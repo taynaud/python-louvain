@@ -7,6 +7,7 @@ community API
 
 .. automodule:: community
    :members:
+   :imported-members:
 
 Indices and tables
 ==================
