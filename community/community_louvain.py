@@ -262,7 +262,7 @@ def generate_dendrogram(graph, part_init=None, weight='weight', resolution=1.):
     :param weight:
     :type weight:
     """
-    if type(graph) != nx.Graph:
+    if graph.is_directed():
         raise TypeError("Bad graph type, use only non directed graph")
 
     # special case, when there is no link
