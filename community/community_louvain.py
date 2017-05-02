@@ -197,7 +197,7 @@ def best_partition(graph, partition=None, weight='weight', resolution=1.):
     >>>                                 if partition[nodes] == com]
     >>>     nx.draw_networkx_nodes(G, pos, list_nodes, node_size = 20,
                                     node_color = str(count / size))
-    >>> nx.draw_networkx_edges(G,pos, alpha=0.5)
+    >>> nx.draw_networkx_edges(G, pos, alpha=0.5)
     >>> plt.show()
     """
     dendo = generate_dendrogram(graph, partition, weight, resolution)
