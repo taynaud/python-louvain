@@ -150,7 +150,7 @@ class BestPartitionTest(unittest.TestCase):
         """
         Test that community found are good using Girvan & Newman benchmark
         """
-        graph = girvan_graphs(4)  # use small zout otherwise results may change
+        graph = girvan_graphs(3)  # use small zout otherwise results may change
         part = co.best_partition(graph)
         for node, com in part.items():
             self.assertEqual(com, part[node % 4])
