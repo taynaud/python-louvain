@@ -5,6 +5,7 @@ This module implements community detection.
 from __future__ import print_function
 import networkx as nx
 import array
+import random
 
 from .community_status import Status
 
@@ -130,7 +131,8 @@ def modularity(partition, graph, weight='weight'):
     return res
 
 
-def best_partition(graph, partition=None, weight='weight', resolution=1.):
+def best_partition(graph, partition=None,
+                   weight='weight', resolution=1., randomize=False):
     """Compute the partition of the graph nodes which maximises the modularity
     (or try..) using the Louvain heuristices
 
@@ -204,7 +206,11 @@ def best_partition(graph, partition=None, weight='weight', resolution=1.):
     return partition_at_level(dendo, len(dendo) - 1)
 
 
-def generate_dendrogram(graph, part_init=None, weight='weight', resolution=1.):
+def generate_dendrogram(graph,
+                        part_init=None,
+                        weight='weight',
+                        resolution=1.,
+                        randomize=False):
     """Find communities in the graph and return the associated dendrogram
 
     A dendrogram is a tree and each level is a partition of the graph nodes.
@@ -277,7 +283,7 @@ def generate_dendrogram(graph, part_init=None, weight='weight', resolution=1.):
     status = Status()
     status.init(current_graph, weight, part_init)
     status_list = list()
-    __one_level(current_graph, status, weight, resolution)
+    __one_level(current_graph, status, weight, resolution, randomize)
     new_mod = __modularity(status)
     partition = __renumber(status.node2com)
     status_list.append(partition)
@@ -286,7 +292,7 @@ def generate_dendrogram(graph, part_init=None, weight='weight', resolution=1.):
     status.init(current_graph, weight)
 
     while True:
-        __one_level(current_graph, status, weight, resolution)
+        __one_level(current_graph, status, weight, resolution, randomize)
         new_mod = __modularity(status)
         if new_mod - mod < __MIN:
             break
@@ -393,7 +399,17 @@ def load_binary(data):
     return graph
 
 
-def __one_level(graph, status, weight_key, resolution):
+def __randomly(seq, randomize):
+    """ Convert sequence or iterable to an iterable in random order if
+    randomize """
+    if randomize:
+        shuffled = list(seq)
+        random.shuffle(shuffled)
+        return iter(shuffled)
+    else:
+        return seq
+
+def __one_level(graph, status, weight_key, resolution, randomize):
     """Compute one level of communities
     """
     modified = True
@@ -406,7 +422,7 @@ def __one_level(graph, status, weight_key, resolution):
         modified = False
         nb_pass_done += 1
 
-        for node in graph.nodes():
+        for node in __randomly(graph.nodes(), randomize):
             com_node = status.node2com[node]
             degc_totw = status.gdegrees.get(node, 0.) / (status.total_weight * 2.)  # NOQA
             neigh_communities = __neighcom(node, graph, status, weight_key)
@@ -414,7 +430,8 @@ def __one_level(graph, status, weight_key, resolution):
                      neigh_communities.get(com_node, 0.), status)
             best_com = com_node
             best_increase = 0
-            for com, dnc in neigh_communities.items():
+            for com, dnc in __randomly(neigh_communities.items(),
+                                       randomize):
                 incr = resolution * dnc - \
                        status.degrees.get(com, 0.) * degc_totw
                 if incr > best_increase:
