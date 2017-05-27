@@ -153,6 +153,9 @@ def best_partition(graph, partition=None,
         represents the time described in
         "Laplacian Dynamics and Multiscale Modular Structure in Networks",
         R. Lambiotte, J.-C. Delvenne, M. Barahona
+    randomize :  boolean, optional
+        Will randomize the node evaluation order and the community evaluation
+        order to get different partitions at each call
 
     Returns
     -------
