@@ -3,9 +3,11 @@
 Test for community package
 """
 import unittest
-import networkx as nx
-import community as co
 import random
+
+import networkx as nx
+
+import community as co
 
 
 def girvan_graphs(zout):
@@ -192,12 +194,14 @@ class BestPartitionTest(unittest.TestCase):
         part = co.best_partition(graph)
         self.assertTrue(co.modularity(part, graph) > 0.41)
 
-        for e1, e2 in graph.edges_iter():
-            graph[e1][e2]["test_weight"] = 1.
+        for src, dst in graph.edges_iter():
+            graph[src][dst]["test_weight"] = 1.
 
         part_weight = co.best_partition(graph, weight="test_weight")
         self.assertAlmostEqual(co.modularity(part, graph),
-                               co.modularity(part_weight, graph, "test_weight"))
+                               co.modularity(part_weight,
+                                             graph,
+                                             "test_weight"))
 
         part_res_low = co.best_partition(graph, resolution=0.1)
         self.assertTrue(
@@ -230,11 +234,12 @@ class InducedGraphTest(unittest.TestCase):
         self.assertEqual(graph.size(weight='weight'),
                          co.induced_graph(part, graph).size(weight='weight'))
 
-        for e1, e2 in graph.edges_iter():
-            graph[e1][e2]["test_weight"] = 2.
+        for src, dst in graph.edges_iter():
+            graph[src][dst]["test_weight"] = 2.
 
+        induced = co.induced_graph(part, graph, "test_weight")
         self.assertEqual(graph.size(weight='test_weight'),
-                         co.induced_graph(part, graph, "test_weight").size(weight='test_weight'))
+                         induced.size(weight='test_weight'))
 
     def test_unique(self):
         """

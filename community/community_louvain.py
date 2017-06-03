@@ -3,9 +3,11 @@
 This module implements community detection.
 """
 from __future__ import print_function
-import networkx as nx
+
 import array
 import random
+
+import networkx as nx
 
 from .community_status import Status
 
@@ -205,7 +207,11 @@ def best_partition(graph, partition=None,
     >>> nx.draw_networkx_edges(G, pos, alpha=0.5)
     >>> plt.show()
     """
-    dendo = generate_dendrogram(graph, partition, weight, resolution)
+    dendo = generate_dendrogram(graph,
+                                partition,
+                                weight,
+                                resolution,
+                                randomize)
     return partition_at_level(dendo, len(dendo) - 1)
 
 
@@ -409,8 +415,8 @@ def __randomly(seq, randomize):
         shuffled = list(seq)
         random.shuffle(shuffled)
         return iter(shuffled)
-    else:
-        return seq
+    return seq
+
 
 def __one_level(graph, status, weight_key, resolution, randomize):
     """Compute one level of communities
