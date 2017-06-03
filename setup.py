@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="python-louvain",
-    version="0.7",
+    version="0.8",
     author="Thomas Aynaud",
     author_email="taynaud@gmail.com",
     description="Louvain algorithm for community detection",
