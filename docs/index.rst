@@ -92,9 +92,8 @@ Changelog :
 ===========
 
 * 2017-06-03 : 0.8, add randomization and bugfixes
-* 2017-05-21 : 0.7, migrate to github, readthedocs and travis. Add resolution
-parameter to control community size, bugfixes
-* 04/21/2011 : modificatios to use networkx like documentation and use of test.
+* 2017-05-21 : 0.7, migrate to github, readthedocs and travis. Add resolution parameter to control community size, bugfixes
+* 04/21/2011 : modifications to use networkx like documentation and use of test.
 * 02/22/2011 : correction of a bug regarding edge weights
 * 01/14/2010 : modification to use networkx 1.01 graph api and adding the possibility to start the algorithm with a given partition
 * 04/10/2009 : increase of the speed of the detection by caching node degrees
