@@ -106,7 +106,7 @@ def modularity(partition, graph, weight='weight'):
     >>> part = best_partition(G)
     >>> modularity(part, G)
     """
-    if type(graph) != nx.Graph:
+    if graph.is_directed():
         raise TypeError("Bad graph type, use only non directed graph")
 
     inc = dict([])
