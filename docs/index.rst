@@ -29,7 +29,7 @@ The program can be found in a repository where you can also report bugs :
 
 .. raw:: html
 
-    <a href="https://bitbucket.org/taynaud/python-louvain">https://bitbucket.org/taynaud/python-louvain</a>
+    <a href="https://github.com/taynaud/python-louvain">https://github.com/taynaud/python-louvain</a>
 
 
 
