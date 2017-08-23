@@ -53,7 +53,7 @@ class Status(object):
                     raise ValueError(error)
                 self.degrees[count] = deg
                 self.gdegrees[node] = deg
-                edge_data = graph.get_edge_data(node, node, {weight: 0})
+                edge_data = graph.get_edge_data(node, node, default={weight: 0})
                 self.loops[node] = float(edge_data.get(weight, 1))
                 self.internals[count] = self.loops[node]
                 count += 1
