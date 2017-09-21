@@ -194,8 +194,8 @@ class BestPartitionTest(unittest.TestCase):
         part = co.best_partition(graph)
         self.assertTrue(co.modularity(part, graph) > 0.41)
 
-        for src, dst in graph.edges_iter():
-            graph[src][dst]["test_weight"] = 1.
+        for e1, e2 in graph.edges():
+            graph[e1][e2]["test_weight"] = 1.
 
         part_weight = co.best_partition(graph, weight="test_weight")
         self.assertAlmostEqual(co.modularity(part, graph),
@@ -234,8 +234,8 @@ class InducedGraphTest(unittest.TestCase):
         self.assertEqual(graph.size(weight='weight'),
                          co.induced_graph(part, graph).size(weight='weight'))
 
-        for src, dst in graph.edges_iter():
-            graph[src][dst]["test_weight"] = 2.
+        for e1, e2 in graph.edges():
+            graph[e1][e2]["test_weight"] = 1.
 
         induced = co.induced_graph(part, graph, "test_weight")
         self.assertEqual(graph.size(weight='test_weight'),

@@ -18,7 +18,7 @@ setup(
 
     packages=['community'],
     install_requires=[
-        "networkx<2.0.0",
+        "networkx",
     ],
 
     scripts=['bin/community']
