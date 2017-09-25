@@ -49,7 +49,7 @@ class Status(object):
                 self.node2com[node] = count
                 deg = float(graph.degree(node, weight=weight))
                 if deg < 0:
-                    error = "Bad graph type ({})".format(type(graph))
+                    error = "Bad node degree ({})".format(deg)
                     raise ValueError(error)
                 self.degrees[count] = deg
                 self.gdegrees[node] = deg
