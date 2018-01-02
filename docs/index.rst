@@ -91,6 +91,7 @@ As python module :
 Changelog :
 ===========
 
+* 2018-01-02 : 0.10, bug fix: taking into account the node removal cost
 * 2017-09-21 : 0.9, support networkx 2.0
 * 2017-06-03 : 0.8, add randomization and bugfixes
 * 2017-05-21 : 0.7, migrate to github, readthedocs and travis. Add resolution parameter to control community size, bugfixes
