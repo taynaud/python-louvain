@@ -74,12 +74,12 @@ class ModularityTest(unittest.TestCase):
 
     def test_empty_graph_input(self):
         """modularity of a graph without links is undefined"""
-        gaph = nx.Graph()
-        gaph.add_nodes_from(range(10))
+        graph = nx.Graph()
+        graph.add_nodes_from(range(10))
         part = dict([])
-        for node in gaph:
+        for node in graph:
             part[node] = 0
-        self.assertRaises(ValueError, co.modularity, part, gaph)
+        self.assertRaises(ValueError, co.modularity, part, graph)
 
     def test_bad_partition_input(self):
         """modularity is undefined when some nodes are not in a community"""
