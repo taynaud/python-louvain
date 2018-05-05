@@ -1,2 +1,2 @@
-networkx<2.0.0
+networkx
 numpydoc
