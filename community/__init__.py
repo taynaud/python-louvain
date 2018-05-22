@@ -15,7 +15,7 @@ from .community_louvain import (
     load_binary,
 )
 
-__version__ = "0.10"
+__version__ = "0.11"
 __author__ = """Thomas Aynaud (thomas.aynaud@lip6.fr)"""
 #    Copyright (C) 2009 by
 #    Thomas Aynaud <thomas.aynaud@lip6.fr>
