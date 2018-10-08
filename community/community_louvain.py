@@ -5,9 +5,12 @@ This module implements community detection.
 from __future__ import print_function
 
 import array
-import random
+
+import numbers
+import warnings
 
 import networkx as nx
+import numpy as np
 
 from .community_status import Status
 
@@ -19,6 +22,28 @@ __author__ = """Thomas Aynaud (thomas.aynaud@lip6.fr)"""
 
 __PASS_MAX = -1
 __MIN = 0.0000001
+
+
+def check_random_state(seed):
+    """Turn seed into a np.random.RandomState instance.
+
+    Parameters
+    ----------
+    seed : None | int | instance of RandomState
+        If seed is None, return the RandomState singleton used by np.random.
+        If seed is an int, return a new RandomState instance seeded with seed.
+        If seed is already a RandomState instance, return it.
+        Otherwise raise ValueError.
+
+    """
+    if seed is None or seed is np.random:
+        return np.random.mtrand._rand
+    if isinstance(seed, (numbers.Integral, np.integer)):
+        return np.random.RandomState(seed)
+    if isinstance(seed, np.random.RandomState):
+        return seed
+    raise ValueError("%r cannot be used to seed a numpy.random.RandomState"
+                     " instance" % seed)
 
 
 def partition_at_level(dendrogram, level):
@@ -133,8 +158,12 @@ def modularity(partition, graph, weight='weight'):
     return res
 
 
-def best_partition(graph, partition=None,
-                   weight='weight', resolution=1., randomize=False):
+def best_partition(graph,
+                   partition=None,
+                   weight='weight',
+                   resolution=1.,
+                   randomize=None,
+                   random_state=None):
     """Compute the partition of the graph nodes which maximises the modularity
     (or try..) using the Louvain heuristices
 
@@ -155,9 +184,14 @@ def best_partition(graph, partition=None,
         represents the time described in
         "Laplacian Dynamics and Multiscale Modular Structure in Networks",
         R. Lambiotte, J.-C. Delvenne, M. Barahona
-    randomize :  boolean, optional
+    randomize : boolean, optional
         Will randomize the node evaluation order and the community evaluation
         order to get different partitions at each call
+    random_state : int, RandomState instance or None, optional (default=None)
+        If int, random_state is the seed used by the random number generator;
+        If RandomState instance, random_state is the random number generator;
+        If None, the random number generator is the RandomState instance used
+        by `np.random`.
 
     Returns
     -------
@@ -211,7 +245,8 @@ def best_partition(graph, partition=None,
                                 partition,
                                 weight,
                                 resolution,
-                                randomize)
+                                randomize,
+                                random_state)
     return partition_at_level(dendo, len(dendo) - 1)
 
 
@@ -219,7 +254,8 @@ def generate_dendrogram(graph,
                         part_init=None,
                         weight='weight',
                         resolution=1.,
-                        randomize=False):
+                        randomize=None,
+                        random_state=None):
     """Find communities in the graph and return the associated dendrogram
 
     A dendrogram is a tree and each level is a partition of the graph nodes.
@@ -280,6 +316,22 @@ def generate_dendrogram(graph,
     if graph.is_directed():
         raise TypeError("Bad graph type, use only non directed graph")
 
+    # Properly handle random state, eventually remove old `randomize` parameter
+    # NOTE: when `randomize` is removed, delete code up to random_state = ...
+    if randomize is not None:
+        warnings.warn("The `randomize` parameter will be deprecated in future "
+                      "versions. Use `random_state` instead.", DeprecationWarning)
+        # If shouldn't randomize, we set a fixed seed to get determinisitc results
+        if randomize is False:
+            random_state = 0
+
+    # We don't know what to do if both `randomize` and `random_state` are defined
+    if randomize and random_state is not None:
+        raise ValueError("`randomize` and `random_state` cannot be used at the "
+                         "same time")
+
+    random_state = check_random_state(random_state)
+
     # special case, when there is no link
     # the best partition is everyone in its community
     if graph.number_of_edges() == 0:
@@ -292,7 +344,7 @@ def generate_dendrogram(graph,
     status = Status()
     status.init(current_graph, weight, part_init)
     status_list = list()
-    __one_level(current_graph, status, weight, resolution, randomize)
+    __one_level(current_graph, status, weight, resolution, random_state)
     new_mod = __modularity(status)
     partition = __renumber(status.node2com)
     status_list.append(partition)
@@ -301,7 +353,7 @@ def generate_dendrogram(graph,
     status.init(current_graph, weight)
 
     while True:
-        __one_level(current_graph, status, weight, resolution, randomize)
+        __one_level(current_graph, status, weight, resolution, random_state)
         new_mod = __modularity(status)
         if new_mod - mod < __MIN:
             break
@@ -408,17 +460,7 @@ def load_binary(data):
     return graph
 
 
-def __randomly(seq, randomize):
-    """ Convert sequence or iterable to an iterable in random order if
-    randomize """
-    if randomize:
-        shuffled = list(seq)
-        random.shuffle(shuffled)
-        return iter(shuffled)
-    return seq
-
-
-def __one_level(graph, status, weight_key, resolution, randomize):
+def __one_level(graph, status, weight_key, resolution, random_state):
     """Compute one level of communities
     """
     modified = True
@@ -431,7 +473,7 @@ def __one_level(graph, status, weight_key, resolution, randomize):
         modified = False
         nb_pass_done += 1
 
-        for node in __randomly(graph.nodes(), randomize):
+        for node in random_state.permutation(list(graph.nodes())):
             com_node = status.node2com[node]
             degc_totw = status.gdegrees.get(node, 0.) / (status.total_weight * 2.)  # NOQA
             neigh_communities = __neighcom(node, graph, status, weight_key)
@@ -441,8 +483,7 @@ def __one_level(graph, status, weight_key, resolution, randomize):
                      neigh_communities.get(com_node, 0.), status)
             best_com = com_node
             best_increase = 0
-            for com, dnc in __randomly(neigh_communities.items(),
-                                       randomize):
+            for com, dnc in random_state.permutation(list(neigh_communities.items())):
                 incr = remove_cost + resolution * dnc - \
                        status.degrees.get(com, 0.) * degc_totw
                 if incr > best_increase:
