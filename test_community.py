@@ -191,17 +191,17 @@ class BestPartitionTest(unittest.TestCase):
     def test_karate(self):
         """"test modularity on Zachary's karate club"""
         graph = nx.karate_club_graph()
-        part = co.best_partition(graph)
+        part = co.best_partition(graph, random_state=0)
         self.assertTrue(co.modularity(part, graph) > 0.41)
 
         for e1, e2 in graph.edges():
             graph[e1][e2]["test_weight"] = 1.
 
-        part_weight = co.best_partition(graph, weight="test_weight")
+        part_weight = co.best_partition(graph, weight="test_weight", random_state=0)
         self.assertAlmostEqual(co.modularity(part, graph),
                                co.modularity(part_weight,
                                              graph,
-                                             "test_weight"))
+                                             "test_weight"), places=2)
 
         part_res_low = co.best_partition(graph, resolution=0.1)
         self.assertTrue(
