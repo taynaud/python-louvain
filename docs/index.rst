@@ -120,9 +120,9 @@ License :
     this list of conditions and the following disclaimer in the documentation
     and/or other materials provided with the distribution.<br><br>
 
-    * Neither the name of the NetworkX Developers nor the names of its contributors
-    may be used to endorse or promote products derived from this software without
-    specific prior written permission.<br><br><br>
+    * Neither the name of the python-louvain Developers nor the names of its
+    contributors may be used to endorse or promote products derived from this
+    software without specific prior written permission.<br><br><br>
 
 
 
