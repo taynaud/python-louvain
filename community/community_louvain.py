@@ -336,8 +336,8 @@ def generate_dendrogram(graph,
     # the best partition is everyone in its community
     if graph.number_of_edges() == 0:
         part = dict([])
-        for node in graph.nodes():
-            part[node] = node
+        for i, node in enumerate(graph.nodes()):
+            part[node] = i
         return [part]
 
     current_graph = graph.copy()
