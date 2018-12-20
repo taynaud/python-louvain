@@ -51,3 +51,6 @@ output/*/index.html
 .DS_Store
 
 .cache
+
+.mypy_cache
+
