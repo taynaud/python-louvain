@@ -91,6 +91,7 @@ As python module :
 Changelog :
 ===========
 
+* 2018-12-21 : 0.13, better random state, some files missing included, communities always in 0..N-1
 * 2018-05-22 : 0.11, stop forcing networkx<2.0 and expose module __version__
 * 2018-01-02 : 0.10, bug fix: taking into account the node removal cost
 * 2017-09-21 : 0.9, support networkx 2.0
