@@ -1,6 +1,7 @@
 
 * Bump version in setup.py
 * Bump version in community/__init__.py
+* Update documentation docs/index.rst
 * Run tests locally
 * Commit, push and wait for travis tests to pass
 * Check docs are updated
