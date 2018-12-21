@@ -1,0 +1,7 @@
+
+* Bump version in setup.py
+* Bump version in community/__init__.py
+* Run tests locally
+* Commit, push and wait for travis tests to pass
+* Check docs are updated
+* python setup.py sdist upload  # To improve to use the new methods
