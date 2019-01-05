@@ -473,7 +473,7 @@ def __one_level(graph, status, weight_key, resolution, random_state):
         modified = False
         nb_pass_done += 1
 
-        for node in random_state.permutation(list(graph.nodes())):
+        for node in random_state.permutation(np.array(list(graph.nodes()), dtype=object)):
             com_node = status.node2com[node]
             degc_totw = status.gdegrees.get(node, 0.) / (status.total_weight * 2.)  # NOQA
             neigh_communities = __neighcom(node, graph, status, weight_key)

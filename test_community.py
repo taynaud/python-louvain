@@ -311,5 +311,24 @@ class GenerateDendrogramTest(unittest.TestCase):
                 self.assertEqual(len(set(comhigher)), 1)
 
 
+class NodeTypeTest(unittest.TestCase):
+    def test_multiple_node_types(self):
+        """
+        Test that a graph with nodes of different Python types still gets
+        correct results
+        """
+        node01 = 6
+        node02 = 'hello'
+        node11 = False
+        node12 = lambda: 0
+        node13 = 22.2
+        edges = [(node01, node02), (node11, node12), (node12, node13)]
+        graph = nx.Graph(edges)
+        partition = co.best_partition(graph)
+        for (a, b) in edges:
+            self.assertEqual(partition[a], partition[b])
+        self.assertNotEqual(partition[node01], partition[node11])
+
+
 if __name__ == '__main__':
     unittest.main()
