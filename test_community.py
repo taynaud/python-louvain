@@ -6,8 +6,10 @@ import unittest
 import random
 
 import networkx as nx
+import numpy
 
 import community as co
+from community.community_louvain import __randomize as randomize
 
 
 def girvan_graphs(zout):
@@ -309,6 +311,44 @@ class GenerateDendrogramTest(unittest.TestCase):
                              for node, comnode in part_1.items()
                              if comnode == com]
                 self.assertEqual(len(set(comhigher)), 1)
+
+
+class RandomizeTest(unittest.TestCase):
+    """Test the __randomize utility function"""
+
+    def test_randomize_handles_list_items(self):
+        """Test that Lists are randomized correctly"""
+        l = list(range(100))
+        random_state = numpy.random.RandomState()
+        randomized_items = randomize(l, random_state)
+        self.assertNotEqual(l, randomized_items, "List was not randomized")
+        self.assertEqual(set(l), set(randomized_items),
+                         "Input items and randomized items are not equal sets")
+        self.assertEqual(sorted(l), l, "Input list was changed")
+
+    def test_randomize_handles_dict_items(self):
+        """Test that Dict#items() are randomized correctly"""
+        d = {"1": 1, 2: 2, "3": "3"}
+        random_state = numpy.random.RandomState()
+        randomized_items = randomize(d.items(), random_state)
+        self.assertEqual(set(d.items()), set(randomized_items),
+                         "Input items and randomized items are not equal sets")
+
+    def test_randomize_handles_mixed_items(self):
+        """Test that Lists of mixed types are randomized correctly"""
+        random_state = numpy.random.RandomState()
+        items = [True, 1, 1.0, lambda x: 1, (2,), "test"]
+        randomized_items = randomize(items, random_state)
+        self.assertEqual(set(items), set(randomized_items),
+                         "Input items and randomized items are not equal sets")
+
+    def test_randomize_handles_iterators(self):
+        """Test that Iterators are randomized correctly"""
+        it = iter(range(10))
+        random_state = numpy.random.RandomState()
+        randomized_items = randomize(it, random_state)
+        self.assertEqual(set(range(10)), set(randomized_items),
+                         "Input items and randomized items are not equal sets")
 
 
 if __name__ == '__main__':
