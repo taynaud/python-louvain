@@ -1,56 +1,85 @@
-*.py[cod]
+# Basic .gitignore file
+# Author: Dalwar Hossain (dalwar.hossain@dimensiondata.com)
 
-# C extensions
+# Memory Profiling data #
+#########################
+mprofile_*.dat
+
+# Compiled python modules #
+###########################
+*.pyc
+*.py[co]
+*.sw[pon]
+*~
+
+# Virtual environment #
+#######################
+venv/
+env/
+
+# Setuptools distribution folder #
+##################################
+dist/
+build/
+_build/
+
+# Python egg metadata, regenerated from source files by setuptools #
+####################################################################
+/*.egg-info
+/*.egg
+/*.eggs
+
+# Compiled source #
+###################
+*.com
+*.class
+*.dll
+*.exe
+*.o
 *.so
+*.war
+*.ear
 
-# Packages
-.eggs
-*.egg
-*.egg-info
-dist
-build
-eggs
-parts
-var
-sdist
-develop-eggs
-.installed.cfg
-lib
-lib64
-/shippable/
+# Packages #
+############
+# it's better to unpack these files and commit the raw source
+# git has its own built in compression methods
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+*.bz2
 
-# Installer logs
-pip-log.txt
+# Logs and databases #
+######################
+*.log
+# *.sql
+*.sqlite
 
-# Unit test / coverage reports
-.coverage
-nosetests.xml
-htmlcov
-unittest.xml
-
-# Translations
-*.mo
-
-# Mr Developer
-.mr.developer.cfg
-.project
-.pydevproject
-.idea
-
-# Complexity
-output/*.html
-output/*/index.html
-
-# makedocs
-/docs/site/
-
-# Editors temporary files
-*.swp
-
-# Finder
+# OS generated files #
+######################
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
 
-.cache
+# IDE files #
+#############
+nbproject
+.~lock.*
+.buildpath
+.idea
+.project
+.settings
+.pydevproject
+.vscode
 
-.mypy_cache
-
+# Project specific files
+.session
