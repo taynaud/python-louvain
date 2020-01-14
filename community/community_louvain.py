@@ -345,7 +345,7 @@ def generate_dendrogram(graph,
     status.init(current_graph, weight, part_init)
     status_list = list()
     __one_level(current_graph, status, weight, resolution, random_state)
-    new_mod = __modularity(status)
+    new_mod = __modularity(status, resolution)
     partition = __renumber(status.node2com)
     status_list.append(partition)
     mod = new_mod
@@ -354,7 +354,7 @@ def generate_dendrogram(graph,
 
     while True:
         __one_level(current_graph, status, weight, resolution, random_state)
-        new_mod = __modularity(status)
+        new_mod = __modularity(status, resolution)
         if new_mod - mod < __MIN:
             break
         partition = __renumber(status.node2com)
@@ -465,7 +465,7 @@ def __one_level(graph, status, weight_key, resolution, random_state):
     """
     modified = True
     nb_pass_done = 0
-    cur_mod = __modularity(status)
+    cur_mod = __modularity(status, resolution)
     new_mod = cur_mod
 
     while modified and nb_pass_done != __PASS_MAX:
@@ -493,7 +493,7 @@ def __one_level(graph, status, weight_key, resolution, random_state):
                      neigh_communities.get(best_com, 0.), status)
             if best_com != com_node:
                 modified = True
-        new_mod = __modularity(status)
+        new_mod = __modularity(status, resolution)
         if new_mod - cur_mod < __MIN:
             break
 
@@ -531,7 +531,7 @@ def __insert(node, com, weight, status):
                                   weight + status.loops.get(node, 0.))
 
 
-def __modularity(status):
+def __modularity(status, resolution):
     """
     Fast compute the modularity of the partition of the graph using
     status precomputed
@@ -542,5 +542,5 @@ def __modularity(status):
         in_degree = status.internals.get(community, 0.)
         degree = status.degrees.get(community, 0.)
         if links > 0:
-            result += in_degree / links - ((degree / (2. * links)) ** 2)
+            result += in_degree * resolution / links -  ((degree / (2. * links)) ** 2)
     return result
