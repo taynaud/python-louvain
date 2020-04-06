@@ -9,6 +9,7 @@
 *.egg-info
 dist
 build
+_build
 eggs
 parts
 var
@@ -54,3 +55,5 @@ output/*/index.html
 
 .mypy_cache
 
+# Virtual Environment
+venv

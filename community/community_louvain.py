@@ -397,7 +397,7 @@ def induced_graph(partition, graph, weight="weight"):
     >>> ind = induced_graph(part, g)
     >>> goal = nx.Graph()
     >>> goal.add_weighted_edges_from([(0,1,n*n),(0,0,n*(n-1)/2), (1, 1, n*(n-1)/2)])  # NOQA
-    >>> nx.is_isomorphic(int, goal)
+    >>> nx.is_isomorphic(ind, goal)
     True
     """
     ret = nx.Graph()
@@ -473,7 +473,7 @@ def __one_level(graph, status, weight_key, resolution, random_state):
         modified = False
         nb_pass_done += 1
 
-        for node in random_state.permutation(np.array(list(graph.nodes()), dtype=object)):
+        for node in __randomize(graph.nodes(), random_state):
             com_node = status.node2com[node]
             degc_totw = status.gdegrees.get(node, 0.) / (status.total_weight * 2.)  # NOQA
             neigh_communities = __neighcom(node, graph, status, weight_key)
@@ -483,7 +483,7 @@ def __one_level(graph, status, weight_key, resolution, random_state):
                      neigh_communities.get(com_node, 0.), status)
             best_com = com_node
             best_increase = 0
-            for com, dnc in random_state.permutation(list(neigh_communities.items())):
+            for com, dnc in __randomize(neigh_communities.items(), random_state):
                 incr = remove_cost + resolution * dnc - \
                        status.degrees.get(com, 0.) * degc_totw
                 if incr > best_increase:
@@ -544,3 +544,10 @@ def __modularity(status):
         if links > 0:
             result += in_degree / links - ((degree / (2. * links)) ** 2)
     return result
+
+
+def __randomize(items, random_state):
+    """Returns a List containing a random permutation of items"""
+    randomized_items = list(items)
+    random_state.shuffle(randomized_items)
+    return randomized_items
