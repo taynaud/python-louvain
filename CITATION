@@ -1,0 +1,18 @@
+Please use one of the following sample to cite python-louvain
+(change x.y to the version you are using).
+
+For text:
+
+T. Aynaud. python-louvain x.y: Louvain algorithm for community detection. 2020. https://github.com/taynaud/python-louvain
+
+A BibTeX entry for LaTeX users is:
+
+@misc{python_louvain,
+   title = {python-louvain x.y: Louvain algorithm for community detection},
+   author = {Thomas Aynaud},
+   year = {2020},
+   howpublished = {\href{https://github.com/taynaud/python-louvain}{\texttt{https://github.com/taynaud/python-louvain}}},
+ }
+
+ If you are unsure about which version of python-louvain you are using run:
+ `pip show python-louvain`.
