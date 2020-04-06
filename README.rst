@@ -24,7 +24,7 @@ Usage
 To use as a python library::
 
 
-    from community import community_louvain
+    import community as community_louvain
     import networkx as nx
     import matplotlib.pyplot as plt
 
