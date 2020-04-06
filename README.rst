@@ -36,7 +36,7 @@ To use as a python library
 
 .. code-block:: python
 
-    import community
+    import community as community_louvain
     import networkx as nx
     import matplotlib.pyplot as plt
 
@@ -44,7 +44,7 @@ To use as a python library
     G = nx.erdos_renyi_graph(30, 0.05)
 
     #first compute the best partition
-    partition = community.best_partition(G)
+    partition = community_louvain.best_partition(G)
 
     #drawing
     size = float(len(set(partition.values())))
