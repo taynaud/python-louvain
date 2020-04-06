@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="python-louvain",
-    version="0.13",
+    version="0.14",
     author="Thomas Aynaud",
     author_email="taynaud@gmail.com",
     description="Louvain algorithm for community detection",
@@ -19,6 +19,7 @@ setup(
     packages=['community'],
     install_requires=[
         "networkx",
+        "numpy"
     ],
 
     scripts=['bin/community']
