@@ -40,8 +40,8 @@ To use as a python library
     import networkx as nx
     import matplotlib.pyplot as plt
 
-    # Replace this with your networkx graph loading depending on your format !
-    G = nx.erdos_renyi_graph(30, 0.05)
+    # load the karate club graph
+    G = nx.karate_club_graph()
 
     #first compute the best partition
     partition = community_louvain.best_partition(G)

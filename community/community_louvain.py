@@ -218,14 +218,14 @@ def best_partition(graph,
 
     Examples
     --------
-    >>>  #Basic usage
-    >>> G=nx.erdos_renyi_graph(100, 0.01)
-    >>> part = best_partition(G)
+    >>> # basic usage
+    >>> G = nx.erdos_renyi_graph(100, 0.01)
+    >>> partion = best_partition(G)
 
-    >>> #other example to display a graph with its community :
-    >>> #better with karate_graph() as defined in networkx examples
-    >>> #erdos renyi don't have true community structure
-    >>> G = nx.erdos_renyi_graph(30, 0.05)
+    >>> # display a graph with its communities:
+    >>> # as Erdos-Renyi graphs don't have true community structure,
+    >>> # instead load the karate club graph
+    >>> G = nx.karate_club_graph()
     >>> #first compute the best partition
     >>> partition = community.best_partition(G)
     >>>  #drawing
