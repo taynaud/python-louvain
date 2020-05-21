@@ -219,25 +219,28 @@ def best_partition(graph,
     Examples
     --------
     >>> # basic usage
+    >>> import community as community_louvain
+    >>> import networkx as nx
     >>> G = nx.erdos_renyi_graph(100, 0.01)
-    >>> partion = best_partition(G)
+    >>> partion = community_louvain.best_partition(G)
 
     >>> # display a graph with its communities:
     >>> # as Erdos-Renyi graphs don't have true community structure,
     >>> # instead load the karate club graph
+    >>> import community as community_louvain
+    >>> import matplotlib.cm as cm
+    >>> import matplotlib.pyplot as plt
+    >>> import networkx as nx
     >>> G = nx.karate_club_graph()
-    >>> #first compute the best partition
-    >>> partition = community.best_partition(G)
-    >>>  #drawing
-    >>> size = float(len(set(partition.values())))
+    >>> # compute the best partition
+    >>> partition = community_louvain.best_partition(G)
+
+    >>> # draw the graph
     >>> pos = nx.spring_layout(G)
-    >>> count = 0.
-    >>> for com in set(partition.values()) :
-    >>>     count += 1.
-    >>>     list_nodes = [nodes for nodes in partition.keys()
-    >>>                                 if partition[nodes] == com]
-    >>>     nx.draw_networkx_nodes(G, pos, list_nodes, node_size = 20,
-                                    node_color = str(count / size))
+    >>> # color the nodes according to their partition
+    >>> cmap = cm.get_cmap('viridis', max(partition.values()) + 1)
+    >>> nx.draw_networkx_nodes(G, pos, partition.keys(), node_size=40, 
+    >>>                        cmap=cmap, node_color=list(partition.values()))
     >>> nx.draw_networkx_edges(G, pos, alpha=0.5)
     >>> plt.show()
     """
