@@ -59,7 +59,7 @@ As python module :
 
 ::
 
-    import community
+    import community as community_louvain
     import networkx as nx
     import matplotlib.pyplot as plt
 
@@ -67,7 +67,7 @@ As python module :
     G = nx.karate_club_graph()
 
     #first compute the best partition
-    partition = community.best_partition(G)
+    partition = community_louvain.best_partition(G)
 
     #drawing
     size = float(len(set(partition.values())))
