@@ -127,9 +127,11 @@ def modularity(partition, graph, weight='weight'):
 
     Examples
     --------
-    >>> G=nx.erdos_renyi_graph(100, 0.01)
-    >>> part = best_partition(G)
-    >>> modularity(part, G)
+    >>> import community as community_louvain
+    >>> import networkx as nx
+    >>> G = nx.erdos_renyi_graph(100, 0.01)
+    >>> partition = community_louvain.best_partition(G)
+    >>> modularity(partition, G)
     """
     if graph.is_directed():
         raise TypeError("Bad graph type, use only non directed graph")
