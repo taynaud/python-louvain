@@ -75,8 +75,8 @@ def partition_at_level(dendrogram, level):
 
     See Also
     --------
-    best_partition which directly combines partition_at_level and
-    generate_dendrogram to obtain the partition of highest modularity
+    best_partition : which directly combines partition_at_level and
+    generate_dendrogram : to obtain the partition of highest modularity
 
     Examples
     --------
@@ -207,7 +207,7 @@ def best_partition(graph,
 
     See Also
     --------
-    generate_dendrogram to obtain all the decompositions levels
+    generate_dendrogram : to obtain all the decompositions levels
 
     Notes
     -----
