@@ -421,18 +421,20 @@ def induced_graph(partition, graph, weight="weight"):
 def __renumber(dictionary):
     """Renumber the values of the dictionary from 0 to n
     """
-    count = 0
-    ret = dictionary.copy()
-    new_values = dict([])
+    values = set(dictionary.values())
+    target = set(range(len(values)))
 
-    for key in dictionary.keys():
-        value = dictionary[key]
-        new_value = new_values.get(value, -1)
-        if new_value == -1:
-            new_values[value] = count
-            new_value = count
-            count += 1
-        ret[key] = new_value
+    if values == target:
+        # no renumbering necessary
+        ret = dictionary.copy()
+    else:
+        # add the values that won't be renumbered
+        renumbering = dict(zip(target.intersection(values),
+                               target.intersection(values)))
+        # add the values that will be renumbered
+        renumbering.update(dict(zip(values.difference(target),
+                                    target.difference(values))))
+        ret = {k: renumbering[v] for k, v in dictionary.items()}
 
     return ret
 

@@ -9,7 +9,7 @@ import networkx as nx
 import numpy
 
 import community as co
-from community.community_louvain import __randomize as randomize
+from community.community_louvain import __randomize as randomize, __renumber as renumber
 
 
 def girvan_graphs(zout):
@@ -369,6 +369,20 @@ class RandomizeTest(unittest.TestCase):
         self.assertEqual(set(range(10)), set(randomized_items),
                          "Input items and randomized items are not equal sets")
 
+
+class RenumberTest(unittest.TestCase):
+    """Test the __renumber utility function"""
+
+    def test_renumber_unchanged(self):
+        """Test that a partition is not renumbered unnecessarily"""
+        in_dict = {0: 1, 1: 0}
+        self.assertEqual(in_dict, renumber(in_dict))
+
+    def test_renumber_changed(self):
+        """Test that a partition is changed when necessary"""
+        in_dict = {0: 0, 1: 3, 2: 4, 3: 6}
+        expected_dict = {0: 0, 1: 3, 2: 1, 3: 2}
+        self.assertEqual(expected_dict, renumber(in_dict))
 
 
 if __name__ == '__main__':
