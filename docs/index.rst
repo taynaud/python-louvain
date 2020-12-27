@@ -76,7 +76,7 @@ As python module :
     pos = nx.spring_layout(G)
     # color the nodes according to their partition
     cmap = cm.get_cmap('viridis', max(partition.values()) + 1)
-    nx.draw_networkx_nodes(G, pos, partition.keys(), node_size=40, 
+    nx.draw_networkx_nodes(G, pos, partition.keys(), node_size=40,
                            cmap=cmap, node_color=list(partition.values()))
     nx.draw_networkx_edges(G, pos, alpha=0.5)
     plt.show()
@@ -87,6 +87,7 @@ As python module :
 Changelog :
 ===========
 
+* 2020-12-27 : 0.15, Stop relabelling stable partitions, tests on power, doc fixes
 * 2020-04-06 : 0.14, bugfixes (on resolution parameter), optimization on random state
 * 2018-12-21 : 0.13, better random state, some files missing included, communities always in 0..N-1
 * 2018-05-22 : 0.11, stop forcing networkx<2.0 and expose module __version__
