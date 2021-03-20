@@ -66,9 +66,6 @@ As python module :
     # load the karate club graph
     G = nx.karate_club_graph()
 
-    #first compute the best partition
-    partition = community_louvain.best_partition(G)
-
     # compute the best partition
     partition = community_louvain.best_partition(G)
 
