@@ -57,3 +57,4 @@ output/*/index.html
 
 # Virtual Environment
 venv
+.Rproj.user
