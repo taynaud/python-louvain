@@ -37,7 +37,7 @@ To use as a Python library
 
 .. code-block:: python
 
-    import community as community_louvain
+    from community import community_louvain
     import matplotlib.cm as cm
     import matplotlib.pyplot as plt
     import networkx as nx
