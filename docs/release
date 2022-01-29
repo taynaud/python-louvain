@@ -5,4 +5,5 @@
 * Run tests locally
 * Commit, push and wait for travis tests to pass
 * Check docs are updated
+* Add a git tag
 * python setup.py sdist upload  # To improve to use the new methods
