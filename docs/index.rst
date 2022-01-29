@@ -69,9 +69,6 @@ As python module :
     #first compute the best partition
     partition = community_louvain.best_partition(G)
 
-    # compute the best partition
-    partition = community_louvain.best_partition(G)
-
     # draw the graph
     pos = nx.spring_layout(G)
     # color the nodes according to their partition
