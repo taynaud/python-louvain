@@ -84,6 +84,7 @@ As python module :
 Changelog :
 ===========
 
+* 2020-12-27 : 0.16, Fix when using the resolution parameter. Doc fixes
 * 2020-12-27 : 0.15, Stop relabelling stable partitions, tests on power, doc fixes
 * 2020-04-06 : 0.14, bugfixes (on resolution parameter), optimization on random state
 * 2018-12-21 : 0.13, better random state, some files missing included, communities always in 0..N-1
