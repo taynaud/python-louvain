@@ -203,7 +203,7 @@ def best_partition(graph,
     Raises
     ------
     NetworkXError
-       If the graph is not Eulerian.
+       If the graph is not undirected.
 
     See Also
     --------
@@ -241,7 +241,7 @@ def best_partition(graph,
     >>> pos = nx.spring_layout(G)
     >>> # color the nodes according to their partition
     >>> cmap = cm.get_cmap('viridis', max(partition.values()) + 1)
-    >>> nx.draw_networkx_nodes(G, pos, partition.keys(), node_size=40, 
+    >>> nx.draw_networkx_nodes(G, pos, partition.keys(), node_size=40,
     >>>                        cmap=cmap, node_color=list(partition.values()))
     >>> nx.draw_networkx_edges(G, pos, alpha=0.5)
     >>> plt.show()
