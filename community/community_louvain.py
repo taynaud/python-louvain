@@ -484,15 +484,15 @@ def __one_level(graph, status, weight_key, resolution, random_state):
             com_node = status.node2com[node]
             degc_totw = status.gdegrees.get(node, 0.) / (status.total_weight * 2.)  # NOQA
             neigh_communities = __neighcom(node, graph, status, weight_key)
-            remove_cost = - resolution * neigh_communities.get(com_node,0) + \
-                (status.degrees.get(com_node, 0.) - status.gdegrees.get(node, 0.)) * degc_totw
+            remove_cost = - neigh_communities.get(com_node,0) + \
+                resolution * (status.degrees.get(com_node, 0.) - status.gdegrees.get(node, 0.)) * degc_totw
             __remove(node, com_node,
                      neigh_communities.get(com_node, 0.), status)
             best_com = com_node
             best_increase = 0
             for com, dnc in __randomize(neigh_communities.items(), random_state):
-                incr = remove_cost + resolution * dnc - \
-                       status.degrees.get(com, 0.) * degc_totw
+                incr = remove_cost + dnc - \
+                       resolution * status.degrees.get(com, 0.) * degc_totw
                 if incr > best_increase:
                     best_increase = incr
                     best_com = com
