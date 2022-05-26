@@ -203,7 +203,7 @@ class BestPartitionTest(unittest.TestCase):
         self.assertAlmostEqual(co.modularity(part, graph),
                                co.modularity(part_weight,
                                              graph,
-                                             "test_weight"), places=2)
+                                             "test_weight"), places=1)
 
         part_res_low = co.best_partition(graph, resolution=0.1)
         self.assertTrue(
