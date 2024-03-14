@@ -61,7 +61,7 @@ class ModularityTest(unittest.TestCase):
             graph = nx.erdos_renyi_graph(50, 0.1)
             part = dict([])
             for node in graph:
-                part[node] = random.randint(0, self.number_of_tests / 10)
+                part[node] = random.randint(0, self.number_of_tests // 10)
             mod = co.modularity(part, graph)
             self.assertGreaterEqual(mod, -1)
             self.assertLessEqual(mod, 1)
